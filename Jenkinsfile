@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build Back-End') {
             steps {
-                dir('inventory-back-end') {
+                dir('back-end') {
                     sh 'mvn clean install -DskipTests'
                 }
             }
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Build Front-End') {
             steps {
-                dir('inventory-front-end') {
+                dir('front-end') {
                     sh 'npm install'
                     sh 'npm run build'
                 }
