@@ -1,29 +1,38 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "node20"
+    }
+
+    environment {
+        BACKEND_DIR = "inventory-back-end"
+        FRONTEND_DIR = "inventory-front-end"
+    }
+
     stages {
 
         stage('Checkout') {
             steps {
-                checkout scm
-                sh "ls -R ."
+                git branch: 'main', url: 'https://github.com/FakherJemli/inventory-app.git'
+                sh 'ls -R .'
             }
         }
 
         stage('Build Back-End (Gradle)') {
             steps {
-                dir('inventory-back-end') {
-                    sh 'chmod +x ./gradlew'
-                    sh './gradlew clean build'
+                dir("${BACKEND_DIR}") {
+                    sh "chmod +x ./gradlew"
+                    sh "./gradlew clean build"
                 }
             }
         }
 
         stage('Build Front-End (Angular)') {
             steps {
-                dir('inventory-front-end') {
-                    sh 'npm install'
-                    sh 'npm run build'
+                dir("${FRONTEND_DIR}") {
+                    sh "npm install"
+                    sh "npm run build"
                 }
             }
         }
@@ -31,7 +40,7 @@ pipeline {
 
     post {
         success {
-            echo "🎉 Build SUCCESS !"
+            echo "✔ Build SUCCESSFUL"
         }
         failure {
             echo "❌ Build FAILED"
