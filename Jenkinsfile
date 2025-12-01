@@ -1,16 +1,11 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK17'            // Ton installation JDK (nom exact dans Jenkins)
-        nodejs 'Node20'        // NOM EXACT que tu viens d’ajouter dans Global Tool Config
-    }
-
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
+                sh 'ls -R .'
             }
         }
 
@@ -26,6 +21,8 @@ pipeline {
         stage('Build Front-End (Angular)') {
             steps {
                 dir('inventory-front-end') {
+                    sh 'node -v'
+                    sh 'npm -v'
                     sh 'npm install'
                     sh 'npm run build'
                 }
@@ -35,7 +32,7 @@ pipeline {
 
     post {
         success {
-            echo "✔️ Build SUCCESS"
+            echo "✔ Build SUCCESSFUL"
         }
         failure {
             echo "❌ Build FAILED"
