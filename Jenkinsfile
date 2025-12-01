@@ -2,37 +2,32 @@ pipeline {
     agent any
 
     tools {
-        nodejs "node20"
-    }
-
-    environment {
-        BACKEND_DIR = "inventory-back-end"
-        FRONTEND_DIR = "inventory-front-end"
+        jdk 'JDK17'            // Ton installation JDK (nom exact dans Jenkins)
+        nodejs 'Node20'        // NOM EXACT que tu viens d’ajouter dans Global Tool Config
     }
 
     stages {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/FakherJemli/inventory-app.git'
-                sh 'ls -R .'
+                checkout scm
             }
         }
 
         stage('Build Back-End (Gradle)') {
             steps {
-                dir("${BACKEND_DIR}") {
-                    sh "chmod +x ./gradlew"
-                    sh "./gradlew clean build"
+                dir('inventory-back-end') {
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean build'
                 }
             }
         }
 
         stage('Build Front-End (Angular)') {
             steps {
-                dir("${FRONTEND_DIR}") {
-                    sh "npm install"
-                    sh "npm run build"
+                dir('inventory-front-end') {
+                    sh 'npm install'
+                    sh 'npm run build'
                 }
             }
         }
@@ -40,7 +35,7 @@ pipeline {
 
     post {
         success {
-            echo "✔ Build SUCCESSFUL"
+            echo "✔️ Build SUCCESS"
         }
         failure {
             echo "❌ Build FAILED"
