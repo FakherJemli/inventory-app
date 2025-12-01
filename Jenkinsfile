@@ -10,19 +10,18 @@ pipeline {
             }
         }
 
-        stage('Build Back-End') {
+        stage('Build Back-End (Gradle)') {
             steps {
                 dir('inventory-back-end') {
-                    sh 'ls -l'
-                    sh 'mvn clean install -DskipTests'
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean build'
                 }
             }
         }
 
-        stage('Build Front-End') {
+        stage('Build Front-End (Angular)') {
             steps {
                 dir('inventory-front-end') {
-                    sh 'ls -l'
                     sh 'npm install'
                     sh 'npm run build'
                 }
